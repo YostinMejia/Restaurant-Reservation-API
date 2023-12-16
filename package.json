@@ -1,0 +1,31 @@
+{
+  "name": "restaurante",
+  "version": "1.0.0",
+  "description": "1. **Sistema de Reservas para Restaurantes con Node.js**:    - **Descripción**: Una aplicación web que permite a los usuarios reservar mesas en restaurantes. La implementación se realizará utilizando Node.js y su ecosistema. La aplicación debe incluir características como búsqueda de restaurantes por ubicación, selección de fechas y horas para reservas, y gestión de perfiles de usuario.    - **Habilidades a demostrar**: Autenticación y autorización de usuarios utilizando frameworks como Passport.js, manejo eficiente de datos con bases de datos NoSQL como MongoDB, integración de APIs externas para la localización de restaurantes mediante Express.js, y despliegue eficaz de la aplicación utilizando herramientas como Docker y servicios de la nube como AWS o Heroku.",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YostinMejia/Reservas-en-Restaurantes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YostinMejia/Reservas-en-Restaurantes/issues"
+  },
+  "homepage": "https://github.com/YostinMejia/Reservas-en-Restaurantes#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mogodb": "^0.0.1-security",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
