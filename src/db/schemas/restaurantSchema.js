@@ -1,4 +1,5 @@
 import { Schema, model, Types } from "mongoose"
+import { validateHour, validateUrl, constainsSpace } from "./validations.js"
 
 const productSchema = new Schema({
     _id: { type: Types.ObjectId, default: () => new Types.ObjectId() },
@@ -23,28 +24,28 @@ const restaurantSchema = new Schema({
         phone: {
             number: {
                 type: String, minLength: 6, maxLength: 15,
-                validate: { validator: constainsSpace, message: "{VALUE} Can't contain spaces." }
+                validate: constainsSpace()
             },
             prefix: {
                 type: String, minLength: 1, maxLength: 6,
-                validate: { validator: constainsSpace, message: "{VALUE} Can't contain spaces." }
+                validate: constainsSpace()
             }
         },
         url: {
             type: String,
-            validate: { validator: validateUrl, message: "{VALUE} Invalid URL format" }
+            validate: validateUrl()
         }
     },
     operationTime: {
         open: {
             type: String,
             required: true,
-            validate: { validator: validateHour, message: "Time Format invalid, the valid format is HH:MM:SS (00:00 a 23:59)." }
+            validate: validateHour()
         },
         close: {
             type: String,
             required: true,
-            validate: { validator: validateHour, message: "Time Format invalid, the valid format is HH:MM:SS (00:00 a 23:59)." }
+            validate: validateHour()
         }
     },
     location: {
@@ -56,16 +57,5 @@ const restaurantSchema = new Schema({
     products: [productSchema]
 
 })
-
-function validateHour(hour) {
-    const regexHora = /^([01]\d|2[0-3]):([0-5]\d)$/
-    return regexHora.test(hour)
-}
-function constainsSpace(text) { return !(/\s/.test(text)) }
-
-function validateUrl(url) {
-    const urlRegex = /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/g
-    return urlRegex.test(url)
-}
 
 export const restaurantModel = model("restaurant", restaurantSchema)

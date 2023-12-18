@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Restaurant } from "../src/controllers/restaurant.js";
+import { Restaurant } from "../src/controllers/restaurantController.js";
 export const router = Router()
 
 router.get("/", Restaurant.get)
