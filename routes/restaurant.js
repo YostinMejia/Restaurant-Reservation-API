@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { Restaurant } from "../src/controllers/restaurantController.js";
-export const router = Router()
+import { RestaurantController } from "../src/controllers/restaurantController.js";
+export const routerRestaurant = Router()
 
-router.get("/", Restaurant.get)
-router.get("/:id", Restaurant.getOne)
-router.post("/", Restaurant.create)
-router.delete("/:id", Restaurant.delete)
-router.patch("/:id", Restaurant.update)
+routerRestaurant.get("/", RestaurantController.get)
+routerRestaurant.get("/:id", RestaurantController.getOne)
+routerRestaurant.post("/", RestaurantController.create)
+routerRestaurant.delete("/:id", RestaurantController.delete)
+routerRestaurant.patch("/:id", RestaurantController.update)
 
 
 

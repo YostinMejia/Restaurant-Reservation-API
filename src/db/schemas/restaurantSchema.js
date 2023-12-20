@@ -3,59 +3,35 @@ import { validateHour, validateUrl, constainsSpace } from "./validations.js"
 
 const productSchema = new Schema({
     _id: { type: Types.ObjectId, default: () => new Types.ObjectId() },
-    name: { type: String, required: true },
-    price: { type: Number, min: 0, required: true },
+    name: { type: String, required:true },
+    price: { type: Number, min: 0, required:true },
     description: { type: String },
     imgPath: { type: String }
 
 })
 
+const restaurantTypes = ["fast food", "ethnic", "fast casual", "thematic", "casual dining", "premium casual", "family restaurant", "fine dining", "buffet restaurant", "barbecue restaurant", "pizzeria", "seafood", "café", "steakhouse", "gastropub", "food truck", "bistro"]
 const restaurantSchema = new Schema({
     name: { type: String, required: [true, "Name is empty"], unique: true, index: true },
-    type: {
-        type: String, enum: {
-            values: ["fast food", "ethnic", "fast casual", "thematic", "casual dining", "premium casual", "family restaurant", "fine dining", "buffet restaurant", "barbecue restaurant", "pizzeria", "seafood", "café", "steakhouse", "gastropub", "food truck", "bistro", "virtual restaurant"]
-            , message: '{VALUE} is not supported'
-        },
-        required: [true, "Restaurant type required"],
-        index: true
-    },
+    type: { type: String, enum: { values: restaurantTypes, message: '{VALUE} is not supported' }, required: [true, "Restaurant type required"], index: true },
     contact: {
         phone: {
-            number: {
-                type: String, minLength: 6, maxLength: 15,
-                validate: constainsSpace()
-            },
-            prefix: {
-                type: String, minLength: 1, maxLength: 6,
-                validate: constainsSpace()
-            }
+            number: { type: String, minLength: 6, maxLength: 15, validate: constainsSpace() },
+            prefix: { type: String, minLength: 1, maxLength: 6, validate: constainsSpace() }
         },
-        url: {
-            type: String,
-            validate: validateUrl()
-        }
+        url: { type: String, validate: validateUrl() }
     },
     operationTime: {
-        open: {
-            type: String,
-            required: true,
-            validate: validateHour()
-        },
-        close: {
-            type: String,
-            required: true,
-            validate: validateHour()
-        }
+        open: { type: String, required: [true, "Opening time is required"], validate: validateHour() },
+        close: { type: String, required: [true, "Closing time is required"], validate: validateHour() }
     },
     location: {
         address: String,
         neighborhood: String,
-        city: { type: String, required: true, index: true },
-        state: { type: String, required: true, index: true }
+        city: { type: String, required: [true, "City is required"], index: true },
+        state: { type: String, required: [true, "State is required"], index: true }
     },
     products: [productSchema]
-
-})
+});
 
 export const restaurantModel = model("restaurant", restaurantSchema)

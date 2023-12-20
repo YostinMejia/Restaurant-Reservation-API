@@ -1,18 +1,18 @@
 import { RestaurantService } from "../services/restaurantService.js"
 
-export class Restaurant {
+export class RestaurantController {
 
     static async create(req, res) {
         const response = await RestaurantService.create(req.body)
         if (response.succes) { return res.status(201).json(response.restaurant) }
-        else if (response.errors.name === "ValidationError") { return res.status(400).json(response.errors) }
+        else if (response.errors.name === "ValidationError"|| response.errors === "NameRegistered") { return res.status(400).json(response.errors) }
         else { res.status(500).json(response.errors) }
     }
     static async getOne(req, res) {
         const response = await RestaurantService.getOne(req.params.id)
         if (response.succes) { return res.status(200).json(response.restaurant) }
-        else if (response.errors.message === "Element not found") { return res.status(404).json(response.errors) }
-        else { res.status(500).json(response) }
+        else if (response.errors.message === "IncorrectId") { return res.status(404).json(response.errors) }
+        else { res.status(500).json(response.errors) }
     }
     static async get(req, res) {
         const response = await RestaurantService.get()

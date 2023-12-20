@@ -10,8 +10,8 @@ export function constainsSpace() {
 
  
 export function validateUrl() {
-    const urlRegex = /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/g
-    return [(url)=>urlRegex.test(url),"{PATH} Invalid URL format"]
+    const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/
+    return [url => urlRegex.test(url), "{PATH} Invalid URL format"];
 }
 
 export function validateEmail(){
