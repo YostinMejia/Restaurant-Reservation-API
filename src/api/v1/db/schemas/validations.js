@@ -3,12 +3,10 @@ export function validateHour() {
     return [(hour)=>regexHora.test(hour),"Time Format invalid, the valid format is HH:MM:SS (00:00 a 23:59)."]
 }
 
-
 export function constainsSpace() {
     return [(text)=>(!(/\s/.test(text))), "{PATH} Can't contain spaces."]
 }
 
- 
 export function validateUrl() {
     const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/
     return [url => urlRegex.test(url), "{PATH} Invalid URL format"];
