@@ -1,4 +1,4 @@
-import { tableModel } from "../db/schemas/reservationSchema.js";
+import { tableModel } from "../models/reservationSchema.js";
 import { NotFound, Registered } from "../errors/errors.js";
 
 export class TableService {
@@ -7,28 +7,28 @@ export class TableService {
         const numberOfTableRegistered = await tableModel.find({ restaurant: body.restaurant, numberOfTable: body.numberOfTable })
         if (numberOfTableRegistered.length > 0) { throw new Registered("Table") }
         const table = new tableModel(body)
-        return { table: await table.save(), succes: true }
+        return { table: await table.save() }
     }
 
     static async get() {
-        return { tables: await tableModel.find(), succes: true }
+        return { tables: await tableModel.find() }
     }
 
     static async getOne(id) {
         const table = await tableModel.findById(id)
         if (table == null) { throw new NotFound("Table") }
-        return { table: table, succes: true }
+        return { table: table }
     }
 
     static async update(id, body) {
         const newtable = await tableModel.findByIdAndUpdate({ "_id": id }, body, { new: true, runValidators: true })
         if (!newtable || newtable.isModified === 0) { throw new NotFound("Table") }
-        return { table: newtable, succes: true }
+        return { table: newtable }
     }
 
     static async delete(id) {
         const response = await tableModel.deleteOne({ "_id": id })
         if (response.deletedCount === 0) { throw new NotFound("Table") }
-        return { message: "table idenfied as: " + id + " deleted", succes: true }
+        return { message: "table idenfied as: " + id + " deleted" }
     }
 } 

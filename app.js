@@ -1,6 +1,7 @@
 import express, { json } from "express"
 import { connectDb } from "./src/api/v1/db/connection.js"
 import { routerRestaurant } from "./src/api/v1/routes/restaurant.js"
+import { routerSearch } from "./src/api/v1/routes/search.js"
 import { errorHandler } from "./src/api/v1/middlewares/errorHandler.js"
 import { notFound } from "./src/api/v1/middlewares/notFound.js"
 import dotenv from "dotenv"
@@ -9,6 +10,7 @@ const app = express()
 
 app.use(json())
 app.use("/api/v1/restaurants", routerRestaurant)
+app.use("/api/v1/search",routerSearch)
 app.use(notFound)
 app.use(errorHandler)
 

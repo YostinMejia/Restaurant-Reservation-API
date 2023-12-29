@@ -1,10 +1,10 @@
 import { Schema, model, Types } from "mongoose"
-import { validateHour, validateUrl, constainsSpace } from "./validations.js"
+import { validateUrl, constainsSpace } from "../utils/validations.js"
 
 const productSchema = new Schema({
     _id: { type: Types.ObjectId, default: () => new Types.ObjectId() },
-    name: { type: String, required:true },
-    price: { type: Number, min: 0, required:true },
+    name: { type: String, required: true },
+    price: { type: Number, min: 0, required: true },
     description: { type: String },
     imgPath: { type: String }
 
@@ -22,8 +22,8 @@ const restaurantSchema = new Schema({
         url: { type: String, validate: validateUrl() }
     },
     operationTime: {
-        open: { type: String, required: [true, "Opening time is required"], validate: validateHour() },
-        close: { type: String, required: [true, "Closing time is required"], validate: validateHour() }
+        open: { type: Number, min: 0, max: 1440, required: [true, "Opening time is required"] },
+        close: { type: Number, min: 0, max: 1440, required: [true, "Closing time is required"] }
     },
     location: {
         address: String,

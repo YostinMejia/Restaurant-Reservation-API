@@ -1,51 +1,791 @@
-# Restaurante
- 
-1. **Sistema de Reservas para Restaurantes con Node.js**:
-   - **Descripción**: Una aplicación web que permite a los usuarios reservar mesas en restaurantes. La implementación se realizará utilizando Node.js y su ecosistema. La aplicación debe incluir características como búsqueda de restaurantes por ubicación, selección de fechas y horas para reservas, y gestión de perfiles de usuario.
-   - **Habilidades a demostrar**: Autenticación y autorización de usuarios utilizando frameworks como Passport.js, manejo eficiente de datos con bases de datos NoSQL como MongoDB, integración de APIs externas para la localización de restaurantes mediante Express.js, y despliegue eficaz de la aplicación utilizando herramientas como Docker y servicios de la nube como AWS o Heroku.
 
-   Para desarrollar un sistema de reservas en Node.js, puedes implementar una serie de requisitos básicos que aborden diferentes aspectos del desarrollo web utilizando este entorno. Aquí hay una lista de requisitos que puedes considerar:
+---
 
-1. **Autenticación de Usuarios**:
-   - Permitir que los usuarios se registren y inicien sesión.
-   - Implementar un sistema de autenticación utilizando Passport.js u otro middleware de autenticación en Node.js.
+# Restaurant Search API
 
-2. **Gestión de Perfiles de Usuario**:
-   - Perfil de usuario que incluya información como nombre, dirección, número de teléfono, etc.
-   - Página de perfil donde los usuarios puedan ver y editar su información.
+## Description
 
-3. **Búsqueda de Restaurantes**:
-   - Permitir a los usuarios buscar restaurantes por ubicación.
-   - Mostrar una lista de restaurantes con detalles como nombre, dirección y descripción.
+The Restaurant Search API provides powerful functionalities to search and filter restaurants based on various criteria such as type, location, name, and operating hours. This documentation details the available filters and how to effectively use them to get specific results.
 
-4. **Reservas de Mesas**:
-   - Habilitar la selección de fechas y horas para las reservas.
-   - Integrar un calendario para mostrar la disponibilidad de mesas.
+## Base URL for Filtering
 
-5. **Carrito de Reservas**:
-   - Permitir a los usuarios agregar y eliminar reservas en un carrito antes de confirmar.
+```
+localhost:3000/api/v1/search
+```
 
-6. **Confirmación de Reservas**:
-   - Enviar confirmaciones por correo electrónico a los usuarios después de realizar una reserva.
+## Available Filters
 
-7. **Gestión de Sesiones y Cookies**:
-   - Utilizar sesiones y cookies para mantener la información del usuario entre diferentes páginas.
+### 1. **Tag**
 
-8. **Manejo de Errores y Validación de Datos**:
-   - Validar los datos del usuario para evitar problemas de seguridad.
-   - Mostrar mensajes de error claros en caso de problemas durante el proceso de reserva.
+- **Parameter:** `tag`
+- **Description:** Specifies the type of entity being searched.
+- **Example Usage:** `tag=restaurant`
 
-9. **Integración con Base de Datos**:
-   - Utilizar una base de datos NoSQL como MongoDB para almacenar información sobre usuarios, restaurantes y reservas.
+### 2. **Restaurant Type**
 
-10. **Seguridad**:
-    - Implementar medidas de seguridad como HTTPS, sanitización de datos y protección contra ataques comunes.
+- **Parameter:** `type`
+- **Description:** Filters restaurants based on their type.
+- **Example Usage:** `type=fast food,dinner,thematic`
 
-11. **Despliegue y Hosting**:
-    - Desplegar la aplicación en un servicio de hosting como Heroku o AWS.
-    - Configurar un dominio personalizado para la aplicación.
+### 3. **Restaurant Name**
 
-12. **Manejo de Excepciones y Logs**:
-    - Implementar un sistema de manejo de excepciones y logs para facilitar la depuración.
+- **Parameter:** `query`
+- **Description:** Filters results based on a search term in the restaurant name.
+- **Example Usage:** `query=mindset`
 
-Al implementar estos requisitos, podrás abordar diferentes aspectos del desarrollo web con Node.js, incluyendo la interacción con bases de datos, la implementación de lógica de negocio y la gestión de la interfaz de usuario.
+### 4. **Restaurant Location**
+
+- **Parameter:** `location`
+- **Description:** Filters by city, state, or neighborhood.
+- **Example Usage:** `location=city_medellin,state_antioquia,neighborhood_asad`
+
+### 5. **Operating Hour Range**
+
+- **Parameter:** `operationTime`
+- **Description:** Filters based on the restaurant's opening and closing hours.
+- **Example Usage:** `operationTime=open>=12:00,close<=16:00`
+
+### 6. **Pagination**
+
+- **Parameters:** `pages` and `perPage`
+- **Description:** Specifies the number of data packets and results per page, respectively.
+- **Example Usage:** `pages=2&perPage=10`
+
+## Combined Usage Examples
+
+### Example 1: Search Thematic Restaurants Open After 12:00 in Medellín
+
+```
+localhost:3000/api/v1/search?tag=restaurant&type=thematic&location=city_medellin&operationTime=open>=12:00&perPage=10
+```
+
+This request searches for thematic restaurants in the city of Medellín, opening after 12:00, and displays 10 results per page.
+
+### Example 2: Filter Restaurants by Name and Location
+
+```
+localhost:3000/api/v1/search?tag=restaurant&query=mindset&location=state_antioquia
+```
+
+This request filters restaurants that have "mindset" in their name and are located in the state of Antioquia.
+
+## Important Notes
+
+- Ensure to provide parameters correctly and in the specified format for accurate results.
+- Filtering logic is applied jointly (AND) for multiple filters.
+
+---
+
+
+Of course, here is an enhanced documentation for CRUD operations on restaurant, table, and reservation entities, using the information provided in the models and the structure of the routes:
+
+---
+
+# API for CRUD Operations on Restaurants, Tables, and Reservations
+
+The API provides CRUD operations to manage restaurants, tables, and reservations. The URL structure to access specific functions is as follows:
+
+```
+localhost:3000/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:idReservation
+```
+
+## CRUD Operations
+
+### 1. **Create a New Restaurant**
+
+- **Method:** `POST`
+- **URL:** `/api/v1/restaurants`
+- **Example Request Body:**
+  ```json
+  {
+    "name": "New Restaurant",
+    "type": "fast food",
+    "contact": {
+      "phone": {
+        "number": "123456789",
+        "prefix": "+1"
+      },
+      "url": "http://example.com"
+    },
+    "operationTime": {
+      "open": 600,
+      "close": 1200
+    },
+    "location": {
+      "address": "123 Main Street",
+      "neighborhood": "Example Neighborhood",
+      "city": "Example City",
+      "state": "Example State"
+    }
+  }
+  ```
+- **Successful Response:**
+  ```json
+  {
+    "message": "Restaurant created successfully",
+    "restaurant": {
+      "_id": "Restaurant_ID",
+      "name": "New Restaurant",
+      "type": "fast food",
+      "contact": {
+        "phone": {
+          "number": "123456789",
+          "prefix": "+1"
+        },
+        "url": "http://example.com"
+      },
+      "operationTime": {
+        "open": 600,
+        "close": 1200
+      },
+      "location": {
+        "address": "123 Main Street",
+        "neighborhood": "Example Neighborhood",
+        "city": "Example City",
+        "state": "Example State"
+      }
+    }
+  }
+  ```
+
+### 2. **Get Details of a Specific Restaurant**
+
+- **Method:** `GET`
+- **URL:** `/api/v1/restaurants/:idRestaurant`
+- **Successful Response:**
+  ```json
+  {
+    "_id": "Restaurant_ID",
+    "name": "Restaurant Name",
+    "type": "Restaurant Type",
+    "contact": {
+      "phone": {
+        "number": "123456789",
+        "prefix": "+1"
+      },
+      "url": "http://example.com"
+    },
+    "operationTime": {
+      "open": 600,
+      "close": 1200
+    },
+    "location": {
+      "address": "123 Main Street",
+      "neighborhood": "Example Neighborhood",
+      "city": "Example City",
+      "state": "Example State"
+    }
+  }
+  ```
+
+### 3. **Update Information of a Restaurant**
+
+- **Method:** `PUT`
+- **URL:** `/api/v1/restaurants/:idRestaurant`
+- **Example Request Body:**
+  ```json
+  {
+    "name": "New Name",
+    "location": {
+      "city": "New City"
+    }
+  }
+  ```
+- **Successful Response:**
+  ```json
+  {
+    "message": "Restaurant information updated successfully",
+    "restaurant": {
+      "_id": "Restaurant_ID",
+      "name": "New Name",
+      "type": "fast food",
+      "contact": {
+        "phone": {
+          "number": "123456789",
+          "prefix": "+1"
+        },
+        "url": "http://example.com"
+      },
+      "operationTime": {
+        "open": 600,
+        "close": 1200
+      },
+      "location": {
+        "address": "123 Main Street",
+        "neighborhood": "Example Neighborhood",
+        "city": "New City",
+        "state": "Example State"
+      }
+    }
+  }
+  ```
+
+### 4. **Delete a Restaurant**
+
+- **Method:** `DELETE`
+- **URL:** `/api/v1/restaurants/:idRestaurant`
+- **Successful Response:**
+  ```json
+  {
+    "message": "Restaurant deleted successfully"
+  }
+  ```
+
+---
+
+### 5. **Add a New Table to a Restaurant**
+
+- **Method:** `POST`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables`
+- **Example Request Body:**
+  ```json
+  {
+    "numberOfTable": 1,
+    "status": "available",
+    "capacity": 4
+  }
+  ```
+- **Successful Response:**
+  ```json
+  {
+    "message": "Table added successfully",
+    "table": {
+      "_id": "Table_ID",
+      "numberOfTable": 1,
+      "status": "available",
+      "capacity": 4
+    }
+  }
+  ```
+
+### 6. **Get Details of a Specific Table in a Restaurant**
+
+- **Method:** `GET`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable`
+- **Successful Response:**
+  ```json
+  {
+    "_id": "Table_ID",
+    "numberOfTable": 1,
+    "status": "available",
+    "capacity": 4
+  }
+  ```
+
+### 7. **Update Information of a Table in a Restaurant**
+
+- **Method:** `PUT`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable`
+- **Example Request Body:**
+  ```json
+  {
+    "numberOfTable": 2
+  }
+  ```
+- **Successful Response:**
+  ```json
+  {
+    "message": "Table information updated successfully",
+    "table": {
+      "_id": "Table_ID",
+      "numberOfTable": 2,
+      "status": "available",
+      "capacity": 4
+    }
+  }
+  ```
+
+### 8. **Delete a Table from a Restaurant**
+
+- **Method:** `DELETE`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable`
+- **Successful Response:**
+  ```json
+  {
+    "message": "Table deleted successfully"
+  }
+  ```
+
+---
+
+### 9. **Create a New Reservation on a Table in a Restaurant**
+
+- **Method:** `POST`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations`
+- **Example Request Body:**
+  ```json
+  {
+    "client": {
+      "name": "Client Name",
+      "birthDay": "1990-01-01",
+      "contact": {
+        "email": "client@example.com",
+        "phoneNumber": "+123456789",
+        "instagram": "http://instagram.com/client"
+      }
+    },
+    "date": "2023-01-01T14:00:00",
+    "endTime": 120,
+    "peopleArrive": 4,
+    "notes": "Additional Notes"
+  }
+  ```
+- **Successful Response:**
+  ```json
+  {
+    "message": "Reservation created successfully",
+    "reservation": {
+      "_id": "Reservation_ID",
+      "client": {
+        "name": "Client Name",
+        "
+
+birthDay": "1990-01-01",
+        "contact": {
+          "email": "client@example.com",
+          "phoneNumber": "+123456789",
+          "instagram": "http://instagram.com/client"
+        }
+      },
+      "date": "2023-01-01T14:00:00",
+      "endTime": 120,
+      "peopleArrive": 4,
+      "notes": "Additional Notes"
+    }
+  }
+  ```
+
+### 10. **Get Details of a Specific Reservation on a Table in a Restaurant**
+
+- **Method:** `GET`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:idReservation`
+- **Successful Response:**
+  ```json
+  {
+    "_id": "Reservation_ID",
+    "client": {
+      "name": "Client Name",
+      "birthDay": "1990-01-01",
+      "contact": {
+        "email": "client@example.com",
+        "phoneNumber": "+123456789",
+        "instagram": "http://instagram.com/client"
+      }
+    },
+    "date": "2023-01-01T14:00:00",
+    "endTime": 120,
+    "peopleArrive": 4,
+    "notes": "Additional Notes"
+  }
+  ```
+
+### 11. **Update Information of a Reservation on a Table in a Restaurant**
+
+- **Method:** `PUT`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:idReservation`
+- **Example Request Body:**
+  ```json
+  {
+    "client": {
+      "name": "New Name",
+      "contact": {
+        "email": "new_client@example.com"
+      }
+    },
+    "date": "2023-01-01T15:30:00",
+    "peopleArrive": 6,
+    "notes": "Updated Notes"
+  }
+  ```
+- **Successful Response:**
+  ```json
+  {
+    "message": "Reservation information updated successfully",
+    "reservation": {
+      "_id": "Reservation_ID",
+      "client": {
+        "name": "New Name",
+        "birthDay": "1990-01-01",
+        "contact": {
+          "email": "new_client@example.com",
+          "phoneNumber": "+123456789",
+          "instagram": "http://instagram.com/client"
+        }
+      },
+      "date": "2023-01-01T15:30:00",
+      "peopleArrive": 6,
+      "notes": "Updated Notes"
+    }
+  }
+  ```
+
+### 12. **Delete a Reservation from a Table in a Restaurant**
+
+- **Method:** `DELETE`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:idReservation`
+- **Successful Response:**
+  ```json
+  {
+    "message": "Reservation deleted successfully"
+  }
+  ```
+
+---
+
+Of course, here is an enhanced documentation for CRUD operations on restaurant, table, and reservation entities, using the information provided in the models and the structure of the routes:
+
+---
+
+# API for CRUD Operations on Restaurants, Tables, and Reservations
+
+The API provides CRUD operations to manage restaurants, tables, and reservations. The URL structure to access specific functions is as follows:
+
+```
+localhost:3000/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:idReservation
+```
+
+## CRUD Operations
+
+### 1. **Create a New Restaurant**
+
+- **Method:** `POST`
+- **URL:** `/api/v1/restaurants`
+- **Example Request Body:**
+  ```json
+  {
+    "name": "New Restaurant",
+    "type": "fast food",
+    "contact": {
+      "phone": {
+        "number": "123456789",
+        "prefix": "+1"
+      },
+      "url": "http://example.com"
+    },
+    "operationTime": {
+      "open": 600,
+      "close": 1200
+    },
+    "location": {
+      "address": "123 Main Street",
+      "neighborhood": "Example Neighborhood",
+      "city": "Example City",
+      "state": "Example State"
+    }
+  }
+  ```
+- **Successful Response:**
+  ```json
+  {
+    "message": "Restaurant created successfully",
+    "restaurant": {
+      "_id": "Restaurant_ID",
+      "name": "New Restaurant",
+      "type": "fast food",
+      "contact": {
+        "phone": {
+          "number": "123456789",
+          "prefix": "+1"
+        },
+        "url": "http://example.com"
+      },
+      "operationTime": {
+        "open": 600,
+        "close": 1200
+      },
+      "location": {
+        "address": "123 Main Street",
+        "neighborhood": "Example Neighborhood",
+        "city": "Example City",
+        "state": "Example State"
+      }
+    }
+  }
+  ```
+
+### 2. **Get Details of a Specific Restaurant**
+
+- **Method:** `GET`
+- **URL:** `/api/v1/restaurants/:idRestaurant`
+- **Successful Response:**
+  ```json
+  {
+    "_id": "Restaurant_ID",
+    "name": "Restaurant Name",
+    "type": "Restaurant Type",
+    "contact": {
+      "phone": {
+        "number": "123456789",
+        "prefix": "+1"
+      },
+      "url": "http://example.com"
+    },
+    "operationTime": {
+      "open": 600,
+      "close": 1200
+    },
+    "location": {
+      "address": "123 Main Street",
+      "neighborhood": "Example Neighborhood",
+      "city": "Example City",
+      "state": "Example State"
+    }
+  }
+  ```
+
+### 3. **Update Information of a Restaurant**
+
+- **Method:** `PUT`
+- **URL:** `/api/v1/restaurants/:idRestaurant`
+- **Example Request Body:**
+  ```json
+  {
+    "name": "New Name",
+    "location": {
+      "city": "New City"
+    }
+  }
+  ```
+- **Successful Response:**
+  ```json
+  {
+    "message": "Restaurant information updated successfully",
+    "restaurant": {
+      "_id": "Restaurant_ID",
+      "name": "New Name",
+      "type": "fast food",
+      "contact": {
+        "phone": {
+          "number": "123456789",
+          "prefix": "+1"
+        },
+        "url": "http://example.com"
+      },
+      "operationTime": {
+        "open": 600,
+        "close": 1200
+      },
+      "location": {
+        "address": "123 Main Street",
+        "neighborhood": "Example Neighborhood",
+        "city": "New City",
+        "state": "Example State"
+      }
+    }
+  }
+  ```
+
+### 4. **Delete a Restaurant**
+
+- **Method:** `DELETE`
+- **URL:** `/api/v1/restaurants/:idRestaurant`
+- **Successful Response:**
+  ```json
+  {
+    "message": "Restaurant deleted successfully"
+  }
+  ```
+
+---
+
+### 5. **Add a New Table to a Restaurant**
+
+- **Method:** `POST`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables`
+- **Example Request Body:**
+  ```json
+  {
+    "numberOfTable": 1,
+    "status": "available",
+    "capacity": 4
+  }
+  ```
+- **Successful Response:**
+  ```json
+  {
+    "message": "Table added successfully",
+    "table": {
+      "_id": "Table_ID",
+      "numberOfTable": 1,
+      "status": "available",
+      "capacity": 4
+    }
+  }
+  ```
+
+### 6. **Get Details of a Specific Table in a Restaurant**
+
+- **Method:** `GET`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable`
+- **Successful Response:**
+  ```json
+  {
+    "_id": "Table_ID",
+    "numberOfTable": 1,
+    "status": "available",
+    "capacity": 4
+  }
+  ```
+
+### 7. **Update Information of a Table in a Restaurant**
+
+- **Method:** `PUT`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable`
+- **Example Request Body:**
+  ```json
+  {
+    "numberOfTable": 2
+  }
+  ```
+- **Successful Response:**
+  ```json
+  {
+    "message": "Table information updated successfully",
+    "table": {
+      "_id": "Table_ID",
+      "numberOfTable": 2,
+      "status": "available",
+      "capacity": 4
+    }
+  }
+  ```
+
+### 8. **Delete a Table from a Restaurant**
+
+- **Method:** `DELETE`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable`
+- **Successful Response:**
+  ```json
+  {
+    "message": "Table deleted successfully"
+  }
+  ```
+
+---
+
+### 9. **Create a New Reservation on a Table in a Restaurant**
+
+- **Method:** `POST`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations`
+- **Example Request Body:**
+  ```json
+  {
+    "client": {
+      "name": "Client Name",
+      "birthDay": "1990-01-01",
+      "contact": {
+        "email": "client@example.com",
+        "phoneNumber": "+123456789",
+        "instagram": "http://instagram.com/client"
+      }
+    },
+    "date": "2023-01-01T14:00:00",
+    "endTime": 120,
+    "peopleArrive": 4,
+    "notes": "Additional Notes"
+  }
+  ```
+- **Successful Response:**
+  ```json
+  {
+    "message": "Reservation created successfully",
+    "reservation": {
+      "_id": "Reservation_ID",
+      "client": {
+        "name": "Client Name",
+        "
+
+birthDay": "1990-01-01",
+        "contact": {
+          "email": "client@example.com",
+          "phoneNumber": "+123456789",
+          "instagram": "http://instagram.com/client"
+        }
+      },
+      "date": "2023-01-01T14:00:00",
+      "endTime": 120,
+      "peopleArrive": 4,
+      "notes": "Additional Notes"
+    }
+  }
+  ```
+
+### 10. **Get Details of a Specific Reservation on a Table in a Restaurant**
+
+- **Method:** `GET`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:idReservation`
+- **Successful Response:**
+  ```json
+  {
+    "_id": "Reservation_ID",
+    "client": {
+      "name": "Client Name",
+      "birthDay": "1990-01-01",
+      "contact": {
+        "email": "client@example.com",
+        "phoneNumber": "+123456789",
+        "instagram": "http://instagram.com/client"
+      }
+    },
+    "date": "2023-01-01T14:00:00",
+    "endTime": 120,
+    "peopleArrive": 4,
+    "notes": "Additional Notes"
+  }
+  ```
+
+### 11. **Update Information of a Reservation on a Table in a Restaurant**
+
+- **Method:** `PUT`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:idReservation`
+- **Example Request Body:**
+  ```json
+  {
+    "client": {
+      "name": "New Name",
+      "contact": {
+        "email": "new_client@example.com"
+      }
+    },
+    "date": "2023-01-01T15:30:00",
+    "peopleArrive": 6,
+    "notes": "Updated Notes"
+  }
+  ```
+- **Successful Response:**
+  ```json
+  {
+    "message": "Reservation information updated successfully",
+    "reservation": {
+      "_id": "Reservation_ID",
+      "client": {
+        "name": "New Name",
+        "birthDay": "1990-01-01",
+        "contact": {
+          "email": "new_client@example.com",
+          "phoneNumber": "+123456789",
+          "instagram": "http://instagram.com/client"
+        }
+      },
+      "date": "2023-01-01T15:30:00",
+      "peopleArrive": 6,
+      "notes": "Updated Notes"
+    }
+  }
+  ```
+
+### 12. **Delete a Reservation from a Table in a Restaurant**
+
+- **Method:** `DELETE`
+- **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:idReservation`
+- **Successful Response:**
+  ```json
+  {
+    "message": "Reservation deleted successfully"
+  }
+  ```
+
+---
+
+
+

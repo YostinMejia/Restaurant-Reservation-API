@@ -8,7 +8,7 @@ routerRestaurant.use("/:id/tables", routerTable)
 routerRestaurant.route("/")
     .get(RestaurantController.get)
     .post(RestaurantController.create)
-    
+
 routerRestaurant.route("/:id")
     .get(RestaurantController.getOne)
     .delete(RestaurantController.delete)

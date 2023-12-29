@@ -1,6 +1,7 @@
 import { TableService } from "../services/tableService.js";
-import { tableModel, reservationModel } from "../db/schemas/reservationSchema.js";
+import { tableModel, reservationModel } from "../models/reservationSchema.js";
 import { NotFound } from "../errors/errors.js";
+import { Error } from "mongoose";
 
 export class ReservationService {
 
@@ -14,7 +15,7 @@ export class ReservationService {
         }
         else if (table.reservations.length === 0) {
             const newReserve = await tableModel.updateOne({ _id: idTable }, { $push: { reservations: reservation } })
-            return { reservation: newReserve, succes: true }
+            return { reservation: newReserve }
         }
         else {
             const isSameDay = (date1, date2) => {
@@ -33,11 +34,11 @@ export class ReservationService {
             })// returns the table if cannot be booked at that hour.
 
             if (notReserved.length > 0) {
-                throw new Error("HourReserved")
+                throw new mongoose.Error.ValidationError("HourReserved")
             }
 
             const newReserve = await tableModel.updateOne({ _id: idTable }, { $push: { reservations: reservation } })
-            return { reservation: newReserve, succes: true }
+            return { reservation: newReserve }
         }
     }
 
@@ -47,8 +48,8 @@ export class ReservationService {
         if (!table) {
             throw new NotFound("Table")
         }
-        
-        return { reservation: table.reservations, succes: true }
+
+        return { reservation: table.reservations }
     }
 
     static async getOne(idTable, idReservation) {
@@ -66,7 +67,7 @@ export class ReservationService {
             throw new NotFound("Reservation")
         }
 
-        return { reservation: table.reservations[indexReservation], succes: true }
+        return { reservation: table.reservations[indexReservation] }
     }
     //to update you need to provide the full reservation object
     static async update(idTable, idReservation, body) {
@@ -83,6 +84,9 @@ export class ReservationService {
         if (indexReservation === -1) {
             throw new NotFound("Reservation")
         }
+        if (!body._id || table.reservations[indexReservation]._id.toString() !== body._id) {
+            throw new Error("_id invalid")
+        }
 
         const newReservation = new reservationModel(body)
         await newReservation.validate()
@@ -91,7 +95,7 @@ export class ReservationService {
 
         const updatedTable = await table.save()
 
-        return { reservation: updatedTable.reservations[indexReservation], success: true }
+        return { reservation: updatedTable.reservations[indexReservation] }
     }
 
 
@@ -111,6 +115,6 @@ export class ReservationService {
         table.reservations.splice(indexReservation, 1)
         await table.save()
 
-        return { message: "Reservation idenfied as: " + idReservation + " deleted.", succes: true }
+        return { message: "Reservation idenfied as: " + idReservation + " deleted." }
     }
 } 

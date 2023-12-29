@@ -8,7 +8,7 @@ routerTable.use("/", routerReservation)
 routerTable.route("/")
     .get(TableController.get)
     .post(TableController.create)
-    
+
 routerTable.route("/:id")
     .get(TableController.getOne)
     .delete(TableController.delete)
