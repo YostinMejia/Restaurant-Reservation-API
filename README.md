@@ -76,9 +76,6 @@ This request filters restaurants that have "mindset" in their name and are locat
 
 ---
 
-
-Of course, here is an enhanced documentation for CRUD operations on restaurant, table, and reservation entities, using the information provided in the models and the structure of the routes:
-
 ---
 
 # API for CRUD Operations on Restaurants, Tables, and Reservations
