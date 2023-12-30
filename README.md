@@ -180,7 +180,7 @@ localhost:3000/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:id
 
 ### 3. **Update Information of a Restaurant**
 
-- **Method:** `PUT`
+- **Method:** `PATCH`
 - **URL:** `/api/v1/restaurants/:idRestaurant`
 - **Example Request Body:**
   ```json
@@ -274,7 +274,7 @@ localhost:3000/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:id
 
 ### 7. **Update Information of a Table in a Restaurant**
 
-- **Method:** `PUT`
+- **Method:** `PATCH`
 - **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable`
 - **Example Request Body:**
   ```json
@@ -338,9 +338,7 @@ localhost:3000/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:id
       "_id": "Reservation_ID",
       "client": {
         "name": "Client Name",
-        "
-
-birthDay": "1990-01-01",
+        "birthDay": "1990-01-01",
         "contact": {
           "email": "client@example.com",
           "phoneNumber": "+123456789",
@@ -381,7 +379,7 @@ birthDay": "1990-01-01",
 
 ### 11. **Update Information of a Reservation on a Table in a Restaurant**
 
-- **Method:** `PUT`
+- **Method:** `PATCH`
 - **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:idReservation`
 - **Example Request Body:**
   ```json
@@ -431,8 +429,6 @@ birthDay": "1990-01-01",
   ```
 
 ---
-
-Of course, here is an enhanced documentation for CRUD operations on restaurant, table, and reservation entities, using the information provided in the models and the structure of the routes:
 
 ---
 
@@ -535,7 +531,7 @@ localhost:3000/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:id
 
 ### 3. **Update Information of a Restaurant**
 
-- **Method:** `PUT`
+- **Method:** `PATCH`
 - **URL:** `/api/v1/restaurants/:idRestaurant`
 - **Example Request Body:**
   ```json
@@ -629,7 +625,7 @@ localhost:3000/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:id
 
 ### 7. **Update Information of a Table in a Restaurant**
 
-- **Method:** `PUT`
+- **Method:** `PATCH`
 - **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable`
 - **Example Request Body:**
   ```json
@@ -692,14 +688,12 @@ localhost:3000/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:id
     "reservation": {
       "_id": "Reservation_ID",
       "client": {
-        "name": "Client Name",
-        "
-
-birthDay": "1990-01-01",
-        "contact": {
-          "email": "client@example.com",
-          "phoneNumber": "+123456789",
-          "instagram": "http://instagram.com/client"
+         "name": "Client Name",
+         "birthDay": "1990-01-01",
+         "contact": {
+            "email": "client@example.com",
+            "phoneNumber": "+123456789",
+            "instagram": "http://instagram.com/client"
         }
       },
       "date": "2023-01-01T14:00:00",
@@ -736,7 +730,7 @@ birthDay": "1990-01-01",
 
 ### 11. **Update Information of a Reservation on a Table in a Restaurant**
 
-- **Method:** `PUT`
+- **Method:** `PATCH`
 - **URL:** `/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:idReservation`
 - **Example Request Body:**
   ```json
