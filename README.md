@@ -781,5 +781,3 @@ localhost:3000/api/v1/restaurants/:idRestaurant/tables/:idTable/reservations/:id
 
 ---
 
-
-
