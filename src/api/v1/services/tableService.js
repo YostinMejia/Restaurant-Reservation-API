@@ -1,4 +1,4 @@
-import { tableModel } from "../models/reservationSchema.js";
+import { tableModel } from "../models/tableModel.js";
 import { NotFound, Registered } from "../errors/errors.js";
 
 export class TableService {
@@ -7,7 +7,9 @@ export class TableService {
         const numberOfTableRegistered = await tableModel.find({ restaurant: body.restaurant, numberOfTable: body.numberOfTable })
         if (numberOfTableRegistered.length > 0) { throw new Registered("Table") }
         const table = new tableModel(body)
-        return { table: await table.save() }
+        console.log(body);
+        await table.save()
+        return table
     }
 
     static async get() {

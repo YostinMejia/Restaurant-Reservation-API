@@ -1,27 +1,35 @@
-import { restaurantModel } from "../models/restaurantSchema.js"
+import { restaurantModel } from "../models/restaurantModel.js"
 import { NotFound } from "../errors/errors.js"
 
 export class RestaurantService {
 
     static async create(body) {
         const restaurant = new restaurantModel(body)
-        return { restaurant: await restaurant.save()}
+        return { restaurant: await restaurant.save() }
     }
 
     static async getOne(id) {
         const restaurant = await restaurantModel.findById(id)
-        if (restaurant === null) { throw new NotFound("Restaurant") }
-        return { restaurant: restaurant}
+
+        if (restaurant === null) {
+            throw new NotFound("Restaurant")
+        }
+
+        return { restaurant: restaurant }
     }
- 
+
     static async get() {
-        return { restaurants: await restaurantModel.find()}
+        return { restaurants: await restaurantModel.find() }
     }
 
     static async delete(id) {
         const restaurantDeleted = await restaurantModel.deleteOne({ "_id": id })
-        if (restaurantDeleted.deletedCount === 0) { throw new NotFound("Restaurant") }
-        return ({ message: 'Restaurant identified as:' + id + " deleted."})
+
+        if (restaurantDeleted.deletedCount === 0) {
+            throw new NotFound("Restaurant")
+        }
+
+        return ({ message: 'Restaurant identified as:' + id + " deleted." })
     }
 
     static async update(id, body) {
@@ -29,7 +37,11 @@ export class RestaurantService {
             new: true,
             runValidators: true
         }))
-        if (!newRestaurant || newRestaurant.isModified === 0) { throw new NotFound("Restaurant") }
-        return { restaurant: newRestaurant}
+
+        if (!newRestaurant || newRestaurant.isModified === 0) {
+            throw new NotFound("Restaurant")
+        }
+
+        return { restaurant: newRestaurant }
     }
 }
