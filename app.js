@@ -14,6 +14,7 @@ import { routerUser } from "./src/api/v1/routes/user.js"
 import { errorHandlerMiddleware } from "./src/api/v1/middlewares/errorHandlerMiddleware.js"
 import { notFoundMiddleware } from "./src/api/v1/middlewares/notFoundMiddleware.js"
 import { authorization } from "./src/api/v1/middlewares/authentication.js"
+import { swaggerDocs } from "./openapi.js"
 
 const app = express()
 dotenv.config()
@@ -48,6 +49,10 @@ app.use("/api/v1/search", routerSearch)
 app.use("/api/v1/user", authorization, routerUser)
 app.use("/api/v1/restaurants", authorization, routerRestaurant)
 
+
+// Documentation
+swaggerDocs(app)
+
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
 
@@ -63,6 +68,7 @@ async function start() {
     try {
         await connectDb()
         console.log("Connected to the db")
+
 
         server.listen(process.env.PORT || 3000, () => {
             console.log("Server listening on port", process.env.PORT ?? 3000)

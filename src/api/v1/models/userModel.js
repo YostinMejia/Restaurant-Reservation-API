@@ -6,6 +6,137 @@ import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 dotenv.config()
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *   Cart:
+ *     type: array
+ *     items:
+ *      properties:
+ *       _id:
+ *         type: string
+ *         description: The unique identifier for the reservation.
+ *         example: "609bfe4b0c00ff001e06559d"
+ *       client:
+ *         $ref: '#/components/schemas/Client'
+ *       date:
+ *         type: string
+ *         format: date
+ *         example: "2024-03-11"
+ *       endTime:
+ *         type: number
+ *         minimum: 0
+ *         maximum: 1440
+ *         example: 1200
+ *       peopleArrive:
+ *         type: number
+ *         minimum: 1
+ *         example: 4
+ *       notes:
+ *         type: string
+ *         example: "Special request: gluten-free"
+ *       tableId:
+ *          type: string
+ *          example: "609bfe4b0c00ff001e06559c "
+ * 
+ *   Login:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *           description: The email address of the user.
+ *           example: john@example.com
+ *         password:
+ *           type: string
+ *           description: The password of the user.
+ *           example: password123    
+ *
+ *   User:
+ *     type: object
+ *     required:
+ *       - name
+ *       - lastName
+ *       - birthDay
+ *       - location
+ *       - contact
+ *       - email
+ *       - password
+ *     properties:
+ *       _id:
+ *         type: string
+ *         format: ObjectId
+ *       name:
+ *         type: string
+ *         example: John
+ *       lastName:
+ *         type: string
+ *         example: Doe
+ *       birthDay:
+ *         type: string
+ *         format: date
+ *         example: 2002-03-11T10:00:00Z
+ *       location:
+ *         type: object
+ *         properties:
+ *           address:
+ *             type: string
+ *             example: 123 Street
+ *           neighborhood:
+ *             type: string
+ *             example: Downtown
+ *           city:
+ *             type: string
+ *             example: New York
+ *           state:
+ *             type: string
+ *             example: NY
+ *       contact:
+ *         type: object
+ *         properties:
+ *           phone:
+ *             type: object
+ *             properties:
+ *               number:
+ *                 type: string
+ *                 example: "123456789"
+ *               prefix:
+ *                 type: string
+ *                 example: "+1"
+ *       rol:
+ *         type: string
+ *         enum:
+ *           - user
+ *           - admin
+ *           - owner
+ *         default: user
+ *         example: user
+ *       email:
+ *         type: string
+ *         format: email
+ *         example: john@example.com
+ *       password:
+ *         type: string
+ *         format: password
+ *         example: Password123
+ *       reserves:
+ *         type: array
+ *         items:
+ *           $ref: "#/components/schemas/Reservation"
+ *       cart:
+ *         type: array
+ *         items:
+ *          $ref: "#/components/schemas/Cart"
+ *       createdAt:
+ *         type: string
+ *         format: date
+ *         example: "2024-03-11T10:00:00Z"
+ *       updatedAt:
+ *         type: string
+ *         format: date
+ *         example: "2024-03-11T10:00:00Z"
+ */
+
 
 const carSchema = new Schema()
 carSchema.add(reservationSchema).add({ idTable: { type: Types.ObjectId, required: true } })

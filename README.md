@@ -20,6 +20,8 @@
 
 Welcome to the Restaurant Reservation API! This API allows users to search for restaurants, make table reservations, and manage their profiles. This documentation details the available filters and how to effectively use them to get specific results.
 
+
+
 ## 2. Authentication
 
 All endpoints, except for user registration and login, require authentication. Use a Bearer Token in the Authorization header.
@@ -114,7 +116,7 @@ host/api/v1/search
 
 - **Parameter:** `location`
 - **Description:** Filters by city, state, or neighborhood.
-- **Example Usage:** `location=city_medellin,state_antioquia,neighborhood_asad`
+- **Example Usage:** `location=city_medellin,state_antioquia,neighborhood_bronx`
 
 ### 5. **Operating Hour Range**
 
